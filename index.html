@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .todo-container {
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+        }
+
+        .task input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="todo-container">
+        <h2>To-Do App</h2>
+
+        <div>
+            <label for="task">New Task:</label>
+            <input type="text" id="task" placeholder="Enter your task" style="width: 150px;">
+            <button onclick="addTask()">Add Task</button>
+        </div>
+
+        <h3>Pending Tasks</h3>
+        <div id="pendingTasks"></div>
+
+        <h3>Completed Tasks</h3>
+        <div id="completedTasks"></div>
+    </div>
+
+    <script>
+        function addTask() {
+            const taskInput = document.getElementById('task');
+            const taskText = taskInput.value.trim();
+
+            if (taskText !== '') {
+                const task = {
+                    text: taskText,
+                    date: new Date(),
+                    completed: false
+                };
+
+                tasks.push(task);
+                displayTasks();
+                taskInput.value = '';
+            }
+        }
+
+        function toggleComplete(index) {
+            tasks[index].completed = !tasks[index].completed;
+            displayTasks();
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            displayTasks();
+        }
+
+        function displayTasks() {
+            const pendingTasksContainer = document.getElementById('pendingTasks');
+            const completedTasksContainer = document.getElementById('completedTasks');
+
+            pendingTasksContainer.innerHTML = '';
+            completedTasksContainer.innerHTML = '';
+
+            tasks.forEach((task, index) => {
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'task';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = task.completed;
+                checkbox.addEventListener('change', () => toggleComplete(index));
+
+                const taskText = document.createElement('span');
+                taskText.textContent = task.text;
+                if (task.completed) {
+                    taskText.className = 'completed';
+                }
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => deleteTask(index));
+
+                taskDiv.appendChild(checkbox);
+                taskDiv.appendChild(taskText);
+                taskDiv.appendChild(deleteButton);
+
+                if (task.completed) {
+                    completedTasksContainer.appendChild(taskDiv);
+                } else {
+                    pendingTasksContainer.appendChild(taskDiv);
+                }
+            });
+        }
+
+        const tasks = [];
+        displayTasks();
+    </script>
+</body>
+</html>
